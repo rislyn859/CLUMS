@@ -59,3 +59,19 @@ CREATE TABLE application_usage (
   duration_time    INT COMMENT 'seconds',
   FOREIGN KEY (session_id) REFERENCES login_sessions(session_id)
 ) ENGINE=InnoDB;
+
+CREATE TABLE ojt_users (
+  ojt_user_id   INT AUTO_INCREMENT PRIMARY KEY,
+  username      VARCHAR(50) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL
+) ENGINE=InnoDB;
+
+CREATE TABLE incident_remarks (
+  remark_id        INT AUTO_INCREMENT PRIMARY KEY,
+  disconnection_id INT NOT NULL,
+  ojt_user_id      INT NOT NULL,
+  remark_text      TEXT NOT NULL,
+  created_at       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (disconnection_id) REFERENCES disconnection_logs(disconnection_id),
+  FOREIGN KEY (ojt_user_id) REFERENCES ojt_users(ojt_user_id)
+) ENGINE=InnoDB;
